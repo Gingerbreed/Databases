@@ -177,7 +177,7 @@ select * from orders;
 
 
 
---Get the cities of agents booking an order for a customer whose pid is	'c006'.	
+--#1 Get the cities of agents booking an order for a customer whose pid is 'c006'.	
 select city
 from agents
 where aid in (select aid 
@@ -185,6 +185,61 @@ where aid in (select aid
 		where orders.cid = 'c006')
 order by city ASC;
 
+--#2 Get the pids of products ordered through any agent who takes at least one order from a customer in Kyoto, sorted by pid from highest to lowest. (This is not the 
+--same as asking for pids of products ordered by customers in Kyoto.)
+
+select pid
+from orders
+where orders.aid in (select aid
+			from orders
+			where orders.cid in (select cid 
+						from customers
+						where city in ('Kyoto'))); 
+--#3 Get the cids and names of customers who did not place an order through agent a03
+
+select cid, name
+from customers
+where cid not in (select cid
+			from orders
+			where orders.aid in ('a03'));
+--#4
+
+select cid 
+from orders
+where pid in ('p07') and cid in (select cid
+				from orders
+				where pid in ('p01'));
+
+--#5 Get the pids of products NOT ordered by any customers who placed any order through agent a05
 
 
+select pid 
+from products 
+where pid not in (select pid
+			from orders
+			where cid  in (select cid
+					from orders
+					where aid = 'a05'));
+--#6 Get the name, discounts, and city for all customers who place orders through agents in Dallas or New York.	
 
+select name, discount, city
+from customers
+where cid in (select cid 
+		from orders
+		where aid in (select aid 
+				from agents
+				where city in ('Dallas','New York')))
+order by name ASC;
+
+--#7 Get all customers	who have the same discount as that of any customers in Dallas or London	
+select *
+from customers
+where discount in (select discount 
+			from customers
+			where city in ('Dallas','London'));
+--#8 Check constraints are a way to set cretain options for data fields. A good example of this is setting a 
+-- column for month where the only values are the abbreviations. THe advantage of putting in these constraints
+-- is that it makes error checking less tedious and also verifies your data inputs. Good examples of this are month,
+-- shift and status, or things whose values do not change. That way, there is no need for another table. A bad example
+-- is building on a campus or other things that change overtime. It would be better to put those into a table by themselves
+-- and then reference them from a query.
