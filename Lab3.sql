@@ -1,4 +1,4 @@
-﻿
+﻿   
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS agents;
@@ -175,7 +175,37 @@ select * from agents;
 select * from products;
 select * from orders;
 
+select ordno, dollars
+from orders;
 
---Get the cities of agents booking an order for a customer whose pid is	'c006'.	
+select name ,city 
+from agents
+where name ='Smith';
 
+select pid, name, priceUSD
+from products
+where quantity > 200000;
 
+select name,city
+from customers
+where city = 'Dallas';
+
+select name 
+from agents
+where city != 'New York' and city != 'Tokyo';
+
+select * 
+from products
+where city not in ('Dallas','Duluth') and priceUSD >= 1.00;
+
+select *
+from orders
+where mon in ('jan', 'may');
+
+select *
+from orders
+where mon in ('feb') and dollars >500;
+
+select *
+from orders
+where orders.cid = 'c005';

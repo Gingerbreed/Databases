@@ -176,6 +176,15 @@ select * from products;
 select * from orders;
 
 
+
 --Get the cities of agents booking an order for a customer whose pid is	'c006'.	
+select city
+from agents
+where aid in (select aid 
+		from orders
+		where orders.cid = 'c006')
+order by city ASC;
+
+
 
 
