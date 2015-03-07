@@ -1,5 +1,4 @@
-﻿
-DROP TABLE IF EXISTS orders;
+﻿DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS agents;
 DROP TABLE IF EXISTS products;
@@ -174,4 +173,44 @@ select * from customers;
 select * from agents;
 select * from products;
 select * from orders;
+
+select a.city
+from agents a, orders o
+where a.aid = o.aid and o.pid = 'p06';
+
+
+select p.pid
+from products p, orders o, customers c, agents a
+where c.cid = o.cid and a.aid = o.aid and p.pid = o.pid
+and o.aid in ('a01', 'a03', 'a06');
+
+
+select name
+from customers
+where cid not in (select cid from orders);
+
+select name
+from customers c left outer join orders o
+on c.cid = o.cid
+where o.cid is null;
+
+select a.name, c.name
+from agents a, customers c, orders o
+where a.aid =o.aid and c.cid = o.cid
+and a.city = c.city;
+
+select a.city
+from agents a join customers c 
+on a.city = c.city;
+
+
+
+SELECT name, city FROM Customers
+WHERE city in(
+Select city FROM 
+(select count(*) , city
+	from products
+	group by city
+	limit 1 
+	)as few_city );
 
